@@ -13,8 +13,6 @@ alter user blog default tablespace users quota unlimited on users;
 GRANT RESOURCE, CONNECT TO blog;
 ```
 
-
-
 ## 테이블
 
 ```sql
@@ -50,9 +48,7 @@ CREATE TABLE reply(
 );
 ```
 
-
-##시퀀스
-
+## 시퀀스
 
 ```sql
 
