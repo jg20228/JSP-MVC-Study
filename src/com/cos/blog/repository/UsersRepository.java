@@ -9,6 +9,8 @@ import java.util.List;
 import com.cos.blog.db.DBConn;
 import com.cos.blog.model.Users;
 
+import oracle.net.aso.r;
+
 public class UsersRepository {
 
 	private static final String TAG = "UsersRepository : ";
@@ -25,6 +27,43 @@ public class UsersRepository {
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
+
+	public Users findByUsernameAndPassword(String username, String password) {
+		// 패스워드는 꺼내지 않는다
+		final String SQL = "SELECT id, username, email, address, userProfile ,userRole, createDate FROM users WHERE username = ? AND password = ?";
+
+		Users user = null;
+
+		try {
+			conn = DBConn.getConnection();
+			pstmt = conn.prepareStatement(SQL);
+
+			pstmt.setString(1, username);
+			pstmt.setString(2, password);
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				user = new Users();
+				user.setId(rs.getInt("id"));
+				user.setUsername(rs.getString("username"));
+				user.setEmail(rs.getString("email"));
+				user.setAddress(rs.getString("address"));
+				user.setUserProfile(rs.getString("userProfile"));
+				user.setUserRole(rs.getString("userRole"));
+				user.setCreateDate(rs.getTimestamp("createDate"));
+			}
+			return user;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(TAG + "findByUsernameAndPassword : " + e.getMessage());
+		} finally {
+			DBConn.close(conn, pstmt);
+		}
+		// 로그인 실패
+		return null;
+	}
 
 	public int save(Users user) {
 

@@ -6,6 +6,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.cos.blog.action.Action;
 import com.cos.blog.model.RoleType;
@@ -13,7 +14,7 @@ import com.cos.blog.model.Users;
 import com.cos.blog.repository.UsersRepository;
 import com.cos.blog.util.Script;
 
-public class UsersJoinProcAction implements Action{
+public class UsersLoginProcAction implements Action{
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -23,37 +24,25 @@ public class UsersJoinProcAction implements Action{
 				request.getParameter("username").equals("") ||
 				request.getParameter("username") ==null ||
 				request.getParameter("password").equals("") ||
-				request.getParameter("password") ==null ||
-				request.getParameter("email").equals("") ||
-				request.getParameter("email") ==null ||
-				request.getParameter("address").equals("") ||
-				request.getParameter("address") ==null 
+				request.getParameter("password") ==null
 		) {
 			return;
 		}
 		// 1. 파라메터 받기 (x-www-form-urlencoded 라는 MIME타입 key=value)
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		String email = request.getParameter("email");
-		String address = request.getParameter("address");
-		String userRole = RoleType.USER.toString();
-		// 2. User - 오브젝트 변환
-		Users user = Users.builder()
-				.username(username)
-				.password(password)
-				.email(email)
-				.address(address)
-				.userRole(userRole)
-				.build();
-		// 3. DB연결 - UserRepositroy의 save() 호출
+		// 2. DB연결 - UserRepositroy의 로그인 메소드 호출
 		UsersRepository usersRepository = UsersRepository.getInstance();
-		int result = usersRepository.save(user);
+		Users user = usersRepository.findByUsernameAndPassword(username, password);
 		
-		// 4. index.jsp 페이지로 이동
-		if(result==1) {
-			Script.href("회원가입에 성공하였습니다.", "/blog/user?cmd=login", response);
+		// 3. index.jsp 페이지로 이동
+		if(user != null) {
+			//session은 request가 들고 있다.
+			HttpSession session = request.getSession();
+			session.setAttribute("principal", user);
+			Script.href("로그인 성공", "/blog5/board?cmd=home", response);
 		}else {
-			Script.back("회원가입에 실패하였습니다.", response);
+			Script.back("로그인에 실패하였습니다.", response);
 		}
 	}
 }
