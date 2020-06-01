@@ -3,20 +3,6 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="/include/nav.jsp"%>
 
-<!-- request, session은 내장객체로 바로 접근 가능-->
-<%
-	Users principal = (Users) session.getAttribute("principal");
-%>
-
-<!-- 이렇게 jsp마다 설정하는게 아니라 nav에다가 설정하면 끝임 -->
-<h1>
-	<%if (principal != null) {%>
-		<%=principal.getUsername()%>
-	<%}%>
-</h1>
-
-
-
 
 <div class="container">
 	<div class="card m-2" style="width: 100%">

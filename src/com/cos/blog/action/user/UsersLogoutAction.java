@@ -7,25 +7,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.cos.blog.action.Action;
+import com.cos.blog.util.Script;
 
-public class UsersLoginAction implements Action {
+public class UsersLogoutAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Cookie[] cookies = request.getCookies();
-		if(cookies != null) {
-			for (Cookie cookie : cookies) {
-				if(cookie.getName().equals("remember")) {
-					request.setAttribute("remember", cookie.getValue());
-				}
-			}
-		}
+		HttpSession session = request.getSession();
 		
+		session.invalidate();
 		
-		RequestDispatcher dis = request.getRequestDispatcher("user/login.jsp");
-		dis.forward(request, response);
+		Script.href("로그아웃 성공", "index.jsp", response);
 	}
 }
