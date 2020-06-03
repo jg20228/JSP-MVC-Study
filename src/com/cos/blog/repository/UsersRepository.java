@@ -28,6 +28,32 @@ public class UsersRepository {
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
 
+	public int findByUsername(String username) {
+		// 패스워드는 꺼내지 않는다
+		final String SQL = "SELECT count(*) FROM users WHERE username = ?";
+
+		try {
+			conn = DBConn.getConnection();
+			pstmt = conn.prepareStatement(SQL);
+
+			pstmt.setString(1, username);
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(TAG + "findByUsername : " + e.getMessage());
+		} finally {
+			DBConn.close(conn, pstmt);
+		}
+		// 로그인 실패
+		return -1;
+	}
+	
+	
 	public Users findByUsernameAndPassword(String username, String password) {
 		// 패스워드는 꺼내지 않는다
 		final String SQL = "SELECT id, username, email, address, userProfile ,userRole, createDate FROM users WHERE username = ? AND password = ?";

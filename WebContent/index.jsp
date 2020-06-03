@@ -3,5 +3,3 @@
 <%response.sendRedirect("/blog5/board?cmd=home"); %>
 index 페이지
 
-
-rhk
