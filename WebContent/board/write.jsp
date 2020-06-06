@@ -11,7 +11,7 @@
 
 		<div class="form-group">
 			<label for="content">Content:</label>
-			<textarea class="form-control" rows="5" id="content" name="content"></textarea>
+			<textarea id="summernote" class="form-control" rows="5" id="content" name="content"></textarea>
 		</div>
 
 		<button type="submit" class="btn btn-primary">글쓰기 등록</button>

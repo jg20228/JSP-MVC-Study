@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.cos.blog.action.Action;
 import com.cos.blog.model.Board;
 import com.cos.blog.repository.BoardRepository;
+import com.cos.blog.util.HtmlParser;
 
 public class BoardHomeAction implements Action {
 
@@ -20,10 +21,7 @@ public class BoardHomeAction implements Action {
 		List<Board> boards = boardRepository.findAll();
 		
 		for (Board board : boards) {
-			String preview = board.getContent();
-			if(preview.length()>10) {
-				preview = preview.substring(0,10)+"...";
-			}
+			String preview = HtmlParser.getContentPreview(board.getContent());
 			board.setContent(preview);
 		}
 		
