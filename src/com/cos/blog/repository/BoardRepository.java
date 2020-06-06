@@ -9,7 +9,6 @@ import java.util.List;
 import com.cos.blog.db.DBConn;
 import com.cos.blog.model.Board;
 
-
 public class BoardRepository {
 
 	private static final String TAG = "BoardRepository : ";
@@ -35,7 +34,7 @@ public class BoardRepository {
 		try {
 			conn = DBConn.getConnection();
 			pstmt = conn.prepareStatement(SQL);
-			
+
 			pstmt.setInt(1, board.getUserId());
 			pstmt.setString(2, board.getTitle());
 			pstmt.setString(3, board.getContent());
@@ -88,15 +87,25 @@ public class BoardRepository {
 
 	// 관리자를 위함
 	public List<Board> findAll() {
-		final String SQL = "";
+		final String SQL = "SELECT ID,USERID,TITLE,CONTENT,READCOUNT,CREATEDATE " + " FROM BOARD ORDER BY id DESC";
 		List<Board> boards = new ArrayList<>();
 
 		try {
 			conn = DBConn.getConnection();
 			pstmt = conn.prepareStatement(SQL);
-			// 물음표 완성
-
+			rs = pstmt.executeQuery();
 			// while 돌려서 rs-> java오브젝트에 집어넣기
+			while (rs.next()) {
+				Board board = new Board(
+						rs.getInt("id"), 
+						rs.getInt("userId"), 
+						rs.getString("title"), 
+						rs.getString("content"), 
+						rs.getInt("readCount"), 
+						rs.getTimestamp("createDate")
+					);
+					boards.add(board);
+			}
 			return boards;
 		} catch (Exception e) {
 			e.printStackTrace();
