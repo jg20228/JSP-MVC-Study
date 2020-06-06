@@ -29,11 +29,17 @@ public class BoardRepository {
 
 	public int save(Board board) {
 
-		final String SQL = "";
+		final String SQL = "INSERT INTO BOARD(id, userId, title, content, readCount,createDate) "
+				+ "VALUES(BOARD_SEQ.nextval, ?,?,?,?,sysdate)";
 
 		try {
 			conn = DBConn.getConnection();
 			pstmt = conn.prepareStatement(SQL);
+			
+			pstmt.setInt(1, board.getUserId());
+			pstmt.setString(2, board.getTitle());
+			pstmt.setString(3, board.getContent());
+			pstmt.setInt(4, board.getReadCount());
 
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
