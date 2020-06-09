@@ -72,6 +72,24 @@ public class BoardRepository {
 		}
 		return -1;
 	}
+	
+	public int updateReadCount(int id) {
+		final String SQL = "UPDATE board SET readCount = readCount + 1 WHERE id = ?";
+		try {
+			conn = DBConn.getConnection();
+			pstmt = conn.prepareStatement(SQL);
+			// 물음표 완성
+			pstmt.setInt(1,id);
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// 오류나면 이 TAG로 찾아가면 된다.
+			System.out.println(TAG + "updateReadCount : " + e.getMessage());
+		} finally {
+			DBConn.close(conn, pstmt);
+		}
+		return -1;
+	}
 
 	public int deleteById(int id) {
 		final String SQL = "DELETE FROM board WHERE id = ?";
@@ -91,6 +109,7 @@ public class BoardRepository {
 		}
 		return -1;
 	}
+	
 
 	// 관리자를 위함
 	public List<Board> findAll() {
@@ -100,6 +119,45 @@ public class BoardRepository {
 		try {
 			conn = DBConn.getConnection();
 			pstmt = conn.prepareStatement(SQL);
+			rs = pstmt.executeQuery();
+			// while 돌려서 rs-> java오브젝트에 집어넣기
+			while (rs.next()) {
+				Board board = new Board(
+						rs.getInt("id"), 
+						rs.getInt("userId"), 
+						rs.getString("title"), 
+						rs.getString("content"), 
+						rs.getInt("readCount"), 
+						rs.getTimestamp("createDate")
+					);
+					boards.add(board);
+			}
+			return boards;
+		} catch (Exception e) {
+			e.printStackTrace();
+			// 오류나면 이 TAG로 찾아가면 된다.
+			System.out.println(TAG + "findAll : " + e.getMessage());
+		} finally {
+			DBConn.close(conn, pstmt, rs);
+		}
+		return null;
+	}
+	
+	public List<Board> findAll(int page) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT /*+ INDEX_DESC(BOARD SYS_C0013356)*/id, ");
+		sb.append("userId, title, content, readCount, createDate ");
+		sb.append("FROM board ");
+		sb.append("OFFSET ? ROWS FETCH NEXT 3 ROWS ONLY ");
+		
+		final String SQL = sb.toString();
+		List<Board> boards = new ArrayList<>();
+
+		try {
+			conn = DBConn.getConnection();
+			pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, page*3);
+			
 			rs = pstmt.executeQuery();
 			// while 돌려서 rs-> java오브젝트에 집어넣기
 			while (rs.next()) {

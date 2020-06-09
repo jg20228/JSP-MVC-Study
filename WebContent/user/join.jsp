@@ -37,7 +37,7 @@
 			<button type="button" class="btn-warning float-right"
 				onclick="goPopup()">주소검색</button>
 			<input type="text" class="form-control" id="address"
-				placeholder="Enter address" name="address" required>
+				placeholder="Enter address" name="address" required readonly>
 			<div class="valid-feedback">Valid.</div>
 			<div class="invalid-feedback">Please fill out this field.</div>
 		</div>

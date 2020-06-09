@@ -9,11 +9,11 @@ public class HtmlParser {
 	public static String getContentYoutube(String content) {
 		Document doc = Jsoup.parse(content);
 		Elements aTags = doc.select("a");
-
+		//3개일떈 되는데 1개일때 안됨..
 		for (Element aTag : aTags) {
 			String href = aTag.attr("href");
 			String youtubeId = null;
-			if(href != null) {
+			if(href != null && !aTag.attr("target").equals("_blank")) {
 				if(href.contains("https://youtu.be")) {
 					String[] hrefArr = href.split("/");
 					youtubeId = hrefArr[3];

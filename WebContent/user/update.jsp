@@ -43,4 +43,5 @@
 	</form>
 </div>
 
+<script src="${path}/js/juso.js"></script>
 <%@ include file="../include/footer.jsp"%>

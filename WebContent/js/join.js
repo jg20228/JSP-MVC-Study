@@ -13,8 +13,6 @@ var isCheckedUsername = false;
  * "width=570,height=420, scrollbars=yes, resizable=yes"); }
  */
 
-
-
 function validate() {
 	if (!isCheckedUsername) {
 		alert('username 중촉 체크를 해 주세요');

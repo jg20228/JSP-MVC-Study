@@ -11,6 +11,7 @@ import com.cos.blog.action.Action;
 import com.cos.blog.model.RoleType;
 import com.cos.blog.model.Users;
 import com.cos.blog.repository.UsersRepository;
+import com.cos.blog.util.SHA256;
 import com.cos.blog.util.Script;
 
 public class UsersJoinProcAction implements Action{
@@ -33,7 +34,9 @@ public class UsersJoinProcAction implements Action{
 		}
 		// 1. 파라메터 받기 (x-www-form-urlencoded 라는 MIME타입 key=value)
 		String username = request.getParameter("username");
-		String password = request.getParameter("password");
+		String rawPassword = request.getParameter("password");
+		String password = SHA256.encodeSha256(rawPassword);
+		
 		String email = request.getParameter("email");
 		String address = request.getParameter("address");
 		String userRole = RoleType.USER.toString();
@@ -51,7 +54,7 @@ public class UsersJoinProcAction implements Action{
 		
 		// 4. index.jsp 페이지로 이동
 		if(result==1) {
-			Script.href("회원가입에 성공하였습니다.", "/blog/user?cmd=login", response);
+			Script.href("회원가입에 성공하였습니다.", "/blog5/user?cmd=login", response);
 		}else {
 			Script.back("회원가입에 실패하였습니다.", response);
 		}

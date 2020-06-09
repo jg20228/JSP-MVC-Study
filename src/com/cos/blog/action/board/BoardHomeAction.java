@@ -17,8 +17,14 @@ public class BoardHomeAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int page = Integer.parseInt(request.getParameter("page"));
+		
+		
+		
 		BoardRepository boardRepository = BoardRepository.getInstance();
-		List<Board> boards = boardRepository.findAll();
+		//List<Board> boards = boardRepository.findAll();
+		
+		List<Board> boards = boardRepository.findAll(page);
 		
 		for (Board board : boards) {
 			String preview = HtmlParser.getContentPreview(board.getContent());
