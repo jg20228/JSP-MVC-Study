@@ -90,6 +90,27 @@ public class BoardRepository {
 		}
 		return -1;
 	}
+	
+	public int count() {
+		final String SQL = "SELECT count(*) FROM board";
+
+		try {
+			conn = DBConn.getConnection();
+			pstmt = conn.prepareStatement(SQL);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(TAG+"count : "+e.getMessage());
+		} finally {
+			DBConn.close(conn, pstmt, rs);
+		}
+
+		return -1;
+	}
 
 	public int deleteById(int id) {
 		final String SQL = "DELETE FROM board WHERE id = ?";
