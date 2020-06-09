@@ -33,6 +33,11 @@ public class BoardDetailAction implements Action {
 		DetailResponseDto dto = boardRepository.findById(id);
 		
 		if(dto !=null) {
+			//유튜브 파싱하기
+			String content = dto.getBoard().getContent();
+			content = HtmlParser.getContentYoutube(content);
+			dto.getBoard().setContent(content);	
+			//request에 dto를 담음
 			request.setAttribute("dto", dto);
 			RequestDispatcher dis = request.getRequestDispatcher("board/detail.jsp");
 			dis.forward(request, response);
