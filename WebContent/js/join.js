@@ -15,7 +15,7 @@ var isCheckedUsername = false;
 
 function validate() {
 	if (!isCheckedUsername) {
-		alert('username 중촉 체크를 해 주세요');
+		alert('username 중복 체크를 해 주세요');
 	}
 	return isCheckedUsername;
 }
@@ -26,12 +26,12 @@ function usernameCheck() {
 	// ajax
 	$.ajax({
 		type : 'get',
-		url : `/blog5/user?cmd=usernameCheck&username=$tfUsername`
+		url : `/blog5/user?cmd=usernameCheck&username=${tfUsername}`
 	}).done(function(result) {
 		console.log(result);
-		if (result == 1) {
+		if (result == '1') {
 			alert('아이디가 중복되었습니다.');
-		} else if (result == 0) {
+		} else if (result == '0') {
 			alert('사용하실 수 있는 아이디 입니다.');
 			isCheckedUsername = true;
 		} else {

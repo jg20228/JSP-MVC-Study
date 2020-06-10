@@ -30,11 +30,11 @@
 		</div>
 
 		<div class="form-group form-check">
-			<label class="form-check-label"> <input
-				class="form-check-input" type="checkbox" name="remember"
-				
+			<label class="form-check-label"> 
+			<input class="form-check-input" type="checkbox" name="remember"
+			
 				<c:if test="${not empty cookie.remember.value}">checked</c:if>
-				/>
+/>
 				<div class="valid-feedback">기억하기</div>
 			</label>
 		</div>

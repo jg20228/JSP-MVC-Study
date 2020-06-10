@@ -15,7 +15,7 @@ public class UsersUsernameCheckAction implements Action{
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username");
-		
+		System.out.println(username);
 		UsersRepository usersRepository = UsersRepository.getInstance();
 		int result = usersRepository.findByUsername(username);
 		
