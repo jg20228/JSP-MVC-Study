@@ -12,17 +12,26 @@ import com.cos.blog.action.Action;
 import com.cos.blog.model.Board;
 import com.cos.blog.repository.BoardRepository;
 import com.cos.blog.util.HtmlParser;
+import com.cos.blog.util.Script;
 
-public class BoardHomeAction implements Action {
+public class BoardSearchAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int page = Integer.parseInt(request.getParameter("page"));
+		
+		if(request.getParameter("keyword") == null ||
+				request.getParameter("keyword").equals("")) {
+			Script.back("검색 키워드가 없습니다.", response);
+			return;
+		}
 
+		int page = Integer.parseInt(request.getParameter("page"));
+		String keyword = request.getParameter("keyword");
+		
 		BoardRepository boardRepository = BoardRepository.getInstance();
 		//List<Board> boards = boardRepository.findAll();
 		
-		List<Board> boards = boardRepository.findAll(page);
+		List<Board> boards = boardRepository.findAll(page, keyword);
 		
 		for (Board board : boards) {
 			String preview = HtmlParser.getContentPreview(board.getContent());
@@ -31,7 +40,7 @@ public class BoardHomeAction implements Action {
 		
 		request.setAttribute("boards", boards);
 		
-		int count = boardRepository.count();
+		int count = boardRepository.count(keyword);
 		int lastPage = (count-1)/3;
 		
 		//현재 페이지 스크롤
