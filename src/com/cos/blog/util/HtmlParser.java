@@ -5,6 +5,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.nhncorp.lucy.security.xss.XssPreventer;
+
 public class HtmlParser {
 	public static String getContentYoutube(String content) {
 		Document doc = Jsoup.parse(content);
@@ -38,7 +40,7 @@ public class HtmlParser {
 		for (Element pTag : PTags) {
 			String text = pTag.text();
 			if (text.length() > 0) {
-				text = text.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+				text = XssPreventer.escape(text);
 				if (text.length() < 11) {
 					return pTag.text();
 				} else {

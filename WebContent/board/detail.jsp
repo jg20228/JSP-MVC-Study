@@ -3,23 +3,23 @@
 
 <div class="container">
  	<%@ include file="../include/goBack.jsp"%>
-	<c:if test="${sessionScope.principal.id == dto.board.userId}">
-		<a href="/blog5/board?cmd=update&id=${dto.board.id }" class="btn btn-warning">수정</a>
-		<button class="btn btn-danger" onclick="deleteById(${dto.board.id})">삭제</button>
+	<c:if test="${sessionScope.principal.id == detailDto.boardDto.board.userId}">
+		<a href="/blog5/board?cmd=update&id=${detailDto.boardDto.board.userId}" class="btn btn-warning">수정</a>
+		<button class="btn btn-danger" onclick="deleteById(${detailDto.boardDto.board.id})">삭제</button>
 	</c:if>
 	<br />
 	<br />
 
 	<h6>
-		작성자 : <i>${dto.username}</i> 조회수 : <i>${dto.board.readCount}</i>
+		작성자 : <i>${detailDto.boardDto.username}</i> 조회수 : <i>${detailDto.boardDto.board.readCount}</i>
 	</h6>
 	<br />
 
 	<h3>
-		<b>${dto.board.title}</b>
+		<b>${detailDto.boardDto.board.title}</b>
 	</h3>
 
-	<div class="m-2">${dto.board.content }</div>
+	<div class="m-2">${detailDto.boardDto.board.content}</div>
 	<hr />
 	<!-- 댓글 박스 -->
 	<div class="row bootstrap snippets">
@@ -30,21 +30,26 @@
 						<b>Comment</b>
 					</div>
 					<div class="panel-body">
-						<textarea class="form-control" placeholder="write a comment..." rows="3"></textarea>
+						<textarea id="reply__write__form" class="form-control" placeholder="write a comment..." rows="3"></textarea>
 						<br>
-						<button type="button" class="btn btn-primary pull-right">댓글쓰기</button>
+						<button onclick="replyWrite(${detailDto.boardDto.board.id}, ${sessionScope.principal.id})" type="button" class="btn btn-primary pull-right">댓글쓰기</button>
 						<div class="clearfix"></div>
 						<hr />
 						<!-- 댓글 리스트 시작-->
-						<ul class="media-list">
+						<ul id="reply__list" class="media-list">
 
-							<c:forEach begin="1" end="10">
+							<c:forEach var="replyDto" items="${detailDto.replyDtos}">
 								<!-- 댓글 아이템 -->
-								<li class="media"><img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle">
+								<li class="media">
+									<img onerror="this.scr='/blog/image/userProfile.png'" 
+									src="${replyDto.userProfile}" alt="" class="img-circle">
 									<div class="media-body">
-										<strong class="text-primary">@MartinoMont</strong>
-										<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet.</p>
-									</div></li>
+										<strong class="text-primary">${replyDto.username}</strong>
+										<p>
+											${replyDto.reply.content}
+										</p>
+									</div>
+									</li>
 							</c:forEach>
 						</ul>
 						<!-- 댓글 리스트 끝-->
@@ -57,6 +62,6 @@
 	<!-- 댓글 박스 끝 -->
 </div>
 
-
 <script src="/blog5/js/detail.js"></script>
+<script src="/blog5/js/reply.js"></script>
 <%@ include file="../include/footer.jsp"%>

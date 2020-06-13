@@ -51,6 +51,7 @@ public class UsersLoginProcAction implements Action{
 				Cookie cookie = new Cookie("remember", null);
 				cookie.setMaxAge(0);
 				response.addCookie(cookie);
+				
 			}
 
 			session.setAttribute("principal", user);
